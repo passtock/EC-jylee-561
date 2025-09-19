@@ -94,4 +94,43 @@ int GPIO_read(PinName_t pinName){
 	return (Port->IDR & (1UL << pin));
 	
 }
+// Initialize DOUT pins for 7 segment leds
+void seven_seg_FND_init(void){	
+    //pin name array
+    PinName_t pinsFND[12]={PB_7, PB_6, PB_5, PB_4, PB_3, PB_2, PB_1, PB_0, PC_3, PC_4, PA_11, PA_10};
 
+	
+    //Iteratively initializing DOUT pins for pinsFND
+    for(int i=0; i<12; i++){
+        GPIO_init(pinsFND[i], OUTPUT); // Set as Output
+        GPIO_write(pinsFND[i], LOW); // turn off all segments and FNDs
+    }
+}
+void seven_seg_FND_display(uint8_t  num, uint8_t select){
+	PinName_t pinsSEG[8] = {PB_7, PB_6, PB_5, PB_4, PB_3, PB_2, PB_1, PB_0};
+	PinName_t pinsFNDselect[4] = {PA_10, PA_11,PC_4, PC_3};
+  
+    int segment[10][8] = {
+		{0, 0, 1, 1, 1, 1, 1, 1}, // 0
+		{0, 0, 0, 0, 0, 1, 1, 0}, // 1
+		{0, 1, 0, 1, 1, 0, 1, 1}, // 2
+		{0, 1, 0, 0, 1, 1, 1, 1}, // 3
+		{0, 1, 1, 0, 0, 1, 1, 0}, // 4
+		{0, 1, 1, 0, 1, 1, 0, 1}, // 5
+		{0, 1, 1, 1, 1, 1, 0, 1}, // 6
+		{0, 0, 0, 0, 0, 1, 1, 1}, // 7
+		{0, 1, 1, 1, 1, 1, 1, 1}, // 8
+		{0, 1, 1, 0, 1, 1, 1, 1}  // 9
+	};
+
+	GPIO_write(pinsFNDselect[select], HIGH);
+	for(int i=0; i<8; i++){
+		if(segment[num][i]==1){
+			GPIO_write(pinsSEG[i], HIGH); // turn on segment
+		}else{
+			GPIO_write(pinsSEG[i], LOW); // turn off segment
+		}
+	}
+
+	
+}

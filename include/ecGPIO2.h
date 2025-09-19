@@ -45,6 +45,12 @@ void GPIO_ospeed(PinName_t pinName, int speed);
 void GPIO_otype(PinName_t pinName, int type);
 void GPIO_pupd(PinName_t pinName, int pupd);
 
+// Initialize 7 DOUT pins for 7 segment leds
+void seven_seg_FND_init(void); 
+
+// Select display: 0 to 3
+// Display a number 0 - 9 only
+void seven_seg_FND_display(uint8_t  num, uint8_t select);
 
  
 #ifdef __cplusplus
