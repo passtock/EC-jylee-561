@@ -122,15 +122,34 @@ void seven_seg_FND_display(uint8_t  num, uint8_t select){
 		{0, 1, 1, 1, 1, 1, 1, 1}, // 8
 		{0, 1, 1, 0, 1, 1, 1, 1}  // 9
 	};
-
-	GPIO_write(pinsFNDselect[select], HIGH);
-	for(int i=0; i<8; i++){
-		if(segment[num][i]==1){
-			GPIO_write(pinsSEG[i], HIGH); // turn on segment
-		}else{
-			GPIO_write(pinsSEG[i], LOW); // turn off segment
-		}
+	uint8_t segs[10]={
+		// 01234567
+		0b11111100, // 0
+		0b01100000, // 1
+		0b11011010, // 2
+		0b11110010, // 3
+		0b01100110, // 4
+		0b10110110, // 5
+		0b10111110, // 6
+		0b11100000, // 7
+		0b11111110, // 8
+		0b11110110  // 9
+	};
+	for(int j =0; j<8; j++){
+		
+		
+		GPIO_write(pinsSEG[j], (segs[num] >> j) & 0x01); // turn on/off segment
+		
+	
 	}
+	GPIO_write(pinsFNDselect[select], HIGH);
+	// for(int i=0; i<8; i++){
+	// 	if(segment[num][i]==1){
+	// 		GPIO_write(pinsSEG[i], HIGH); // turn on segment
+	// 	}else{
+	// 		GPIO_write(pinsSEG[i], LOW); // turn off segment
+	// 	}
+	// }
 
 	
 }
