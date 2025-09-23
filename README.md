@@ -4,11 +4,11 @@
 
 ## Embedded Controller HAL Library
 
-Written by: Your Name
+Written by: leejeayongs
 
 Program: C/C++
 
-IDE/Compiler: Keil uVision 5
+IDE/Compiler: platformini
 
 OS: WIn10
 
@@ -25,6 +25,9 @@ MCU: STM32F411RE, Nucleo-64
   * [GPIO\_ospeed()](#gpio-ospeed----)
   * [GPIO\_otype()](#gpio-otype----)
   * [GPIO\_pupdr()](#gpio-pupdr----)
+* [RCC](#RCC)
+    *[RCC/seven_seg_FND_init()](#RCC-seven_seg_FND_init----)
+    *[RCC/ seven_seg_FND_display()](#RCC-seven_seg_FND_display----)
 
 ## GPIO Digital InOut
 
@@ -227,9 +230,71 @@ void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pupd);
 ```
 GPIO_pupdr(GPIOA, 5, 0);  // 0: No Pull-up, Pull-down
 ```
+## RCC
+
+### seven_seg_FND_init
+
+```c
+void seven_seg_FND_init(void);
+```
+
+**Description**
+
+Initializes the DOUT pins for 7-segment LEDs. Sets all segment and digit select pins as outputs and turns off all segments and digits.
+
+**Parameters**
+
+None
+
+**Example code**
+
+```c
+seven_seg_FND_init();
+```
+
+---
+
+### seven_seg_FND_display
+
+```c
+void seven_seg_FND_display(uint8_t num, uint8_t select);
+```
+
+**Description**
+
+Displays a decimal digit (`num`) on a selected 7-segment display (`select`). Sets the appropriate segment pins to show the digit and activates the selected digit.
+
+**Parameters**
+
+* **num**: The digit to display (0~9)
+* **select**: The digit position to activate (0~3)
+
+**Example code**
+
+```c
+seven_seg_FND_display(5, 2); // Display '5' on the third digit
+```
+
 
 ## Class or Header name
 
+### Function Name
+
+```
+```
+
+**Parameters**
+
+* p1
+* p2
+
+**Example code**
+
+```
+```
+
+
+## Class or Header name
 ### Function Name
 
 ```
