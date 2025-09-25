@@ -4,38 +4,37 @@
 
 ## Embedded Controller HAL Library
 
-Written by: leejeayongs
+**Written by:** leejeayongs  
+**Program:** C/C++  
+**IDE/Compiler:** PlatformIO  
+**OS:** Win10  
+**MCU:** STM32F411RE, Nucleo-64
 
-Program: C/C++
+---
 
-IDE/Compiler: platformini
+## Table of Contents
 
-OS: WIn10
+- [GPIO Digital In/Out](#gpio-digital-inout)
+  - [Header File](#header-file)
+  - [GPIO_init()](#gpio_init)
+  - [GPIO_mode()](#gpio_mode)
+  - [GPIO_write()](#gpio_write)
+  - [GPIO_read()](#gpio_read)
+  - [GPIO_ospeed()](#gpio_ospeed)
+  - [GPIO_otype()](#gpio_otype)
+  - [GPIO_pupdr()](#gpio_pupdr)
+- [RCC](#rcc)
+  - [seven_seg_FND_init()](#seven_seg_fnd_init)
+  - [seven_seg_FND_display()](#seven_seg_fnd_display)
 
-MCU: STM32F411RE, Nucleo-64
+---
 
-**Table of Contents**
-
-* [GPIO Digital In/Out](#gpio-digital-inout)
-  * [Header File](#header-file)
-  * [GPIO\_init()](#gpio-init----)
-  * [GPIO\_mode()](#gpio-mode----)
-  * [GPIO\_write()](#gpio-write----)
-  * [GPIO\_read()](#gpio-read----)
-  * [GPIO\_ospeed()](#gpio-ospeed----)
-  * [GPIO\_otype()](#gpio-otype----)
-  * [GPIO\_pupdr()](#gpio-pupdr----)
-* [RCC](#RCC)
-  * [RCC/seven_seg_FND_init()](#RCC-seven_seg_FND_init----)
-  * [RCC/ seven_seg_FND_display()](#RCC-seven_seg_FND_display----)
-
-## GPIO Digital InOut
+## GPIO Digital In/Out
 
 ### Header File
 
-`#include "ecGPIO.h"`
-
-```
+```c
+#include "ecGPIO.h"
 #include "stm32f411xe.h"
 #include "ecRCC.h"
 
@@ -43,39 +42,39 @@ MCU: STM32F411RE, Nucleo-64
 #define __ECGPIO_H
 
 // MODER
-#define INPUT  		0x00
-#define OUTPUT 		0x01
-#define AF     		0x02
-#define ANALOG 		0x03
+#define INPUT        0x00
+#define OUTPUT       0x01
+#define AF           0x02
+#define ANALOG       0x03
 
 // IDR & ODR
-#define HIGH 		1
-#define LOW  		0
+#define HIGH         1
+#define LOW          0
 
 // OSPEED
-#define LOW_SPEED		0x00
-#define MID_SPEED		0x01
-#define FAST_SPEED		0x02
-#define HIGH_SPEED		0x03
+#define LOW_SPEED    0x00
+#define MID_SPEED    0x01
+#define FAST_SPEED   0x02
+#define HIGH_SPEED   0x03
 
 // OTYPER
-#define PUSH_PULL 		0	// Push-pull
-#define OPEN_DRAIN 		1 	// Open-Drain
+#define PUSH_PULL    0   // Push-pull
+#define OPEN_DRAIN   1   // Open-Drain
 
 // PUDR
-#define NO_PUPD			0x00 	// No pull-up, pull-down
-#define PULL_UP			0x01 	// Pull-up
-#define PULL_DOWN 		0x02 	// Pull-down	
-#define RESERVED 		0x03 	// Reserved
+#define NO_PUPD      0x00    // No pull-up, pull-down
+#define PULL_UP      0x01    // Pull-up
+#define PULL_DOWN    0x02    // Pull-down  
+#define RESERVED     0x03    // Reserved
 
 // PIN
-#define LED_PIN 		5
-#define BUTTON_PIN 		13
+#define LED_PIN      5
+#define BUTTON_PIN   13
 
 #ifdef __cplusplus
  extern "C" {
-#endif /* __cplusplus */
-	 
+#endif
+
 void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
 void GPIO_mode(GPIO_TypeDef* Port, int pin, int mode);
 void GPIO_write(GPIO_TypeDef *Port, int pin, int output);
@@ -86,150 +85,167 @@ void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pupd);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
 #endif
 ```
 
-### GPIO\_init()
+---
 
-Initializes GPIO pins with default setting and Enables GPIO Clock. Mode: In/Out/AF/Analog
+### GPIO_init()
 
-```
+Initializes GPIO pins with default setting and enables GPIO Clock. Mode: In/Out/AF/Analog
+
+```c
 void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **mode**: INPUT(0), OUTPUT(1), AF(02), ANALOG (03)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **mode:** INPUT(0), OUTPUT(1), AF(2), ANALOG(3)
 
 **Example code**
 
-```
+```c
 GPIO_init(GPIOA, 5, OUTPUT);
-GPIO_init(GPIOC, 13, INPUT); //GPIO_init(GPIOC, 13, 0);
+GPIO_init(GPIOC, 13, INPUT); // GPIO_init(GPIOC, 13, 0);
 ```
 
-### GPIO\_mode()
+---
+
+### GPIO_mode()
 
 Configures GPIO pin modes: In/Out/AF/Analog
 
-```
-void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
+```c
+void GPIO_mode(GPIO_TypeDef *Port, int pin, int mode);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **mode**: INPUT (0), OUTPUT (1), AF(02), ANALOG (03)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **mode:** INPUT(0), OUTPUT(1), AF(2), ANALOG(3)
 
 **Example code**
 
-```
+```c
 GPIO_mode(GPIOA, 5, OUTPUT);
 ```
 
-### GPIO\_write()
+---
+
+### GPIO_write()
 
 Write the data to GPIO pin: High, Low
 
-```
-write(GPIO_TypeDef *Port, int pin, int output);
+```c
+void GPIO_write(GPIO_TypeDef *Port, int pin, int output);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **output**: LOW(0), HIGH(1)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **output:** LOW(0), HIGH(1)
 
 **Example code**
 
-```
-GPIO_write(GPIOA, 5, 1);  // 1: High
+```c
+GPIO_write(GPIOA, 5, HIGH);  // 1: High
 ```
 
-### GPIO\_read()
+---
+
+### GPIO_read()
 
 Read the data from GPIO pin
 
-```
-int  GPIO_read(GPIO_TypeDef *Port, int pin);
+```c
+int GPIO_read(GPIO_TypeDef *Port, int pin);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
 
 **Example code**
 
-```
+```c
 GPIO_read(GPIOC, 13);
 ```
 
-### GPIO\_ospeed()
+---
 
-Configures output speed of GPIO pin : Low, Mid, Fast, High
+### GPIO_ospeed()
 
-```
+Configures output speed of GPIO pin: Low, Mid, Fast, High
+
+```c
 void GPIO_ospeed(GPIO_TypeDef* Port, int pin, int speed);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **speed**: LOW\_SPEED(0), MID\_SPEED(1), FAST\_SPEED(2) , HIGH\_SPEED(3)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **speed:** LOW_SPEED(0), MID_SPEED(1), FAST_SPEED(2), HIGH_SPEED(3)
 
 **Example code**
 
-```
-GPIO_ospeed(GPIOA, 5, 2);  // 2: FAST_SPEED
+```c
+GPIO_ospeed(GPIOA, 5, FAST_SPEED);  // 2: FAST_SPEED
 ```
 
-### GPIO\_otype()
+---
+
+### GPIO_otype()
 
 Configures output type of GPIO pin: Push-Pull / Open-Drain
 
-```
+```c
 void GPIO_otype(GPIO_TypeDef* Port, int pin, int type);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **type**: PUSH\_PULL(0), OPEN\_DRAIN(1)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **type:** PUSH_PULL(0), OPEN_DRAIN(1)
 
 **Example code**
 
-```
-GPIO_otype(GPIOA, 5, 0);  // 0: Push-Pull
+```c
+GPIO_otype(GPIOA, 5, PUSH_PULL);  // 0: Push-Pull
 ```
 
-### GPIO\_pupdr()
+---
+
+### GPIO_pupdr()
 
 Configures Pull-up/Pull-down mode of GPIO pin: No Pull-up, Pull-down/ Pull-up/ Pull-down/ Reserved
 
-```
+```c
 void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pupd);
 ```
 
 **Parameters**
 
-* **Port:** Port Number, GPIOA\~GPIOH
-* **pin**: pin number (int) 0\~15
-* **pupd**: NO\_PUPD(0), PULL\_UP(1), PULL\_DOWN(2), RESERVED(3)
+- **Port:** Port Number, GPIOA~GPIOH
+- **pin:** pin number (int) 0~15
+- **pupd:** NO_PUPD(0), PULL_UP(1), PULL_DOWN(2), RESERVED(3)
 
 **Example code**
 
+```c
+GPIO_pupdr(GPIOA, 5, NO_PUPD);  // 0: No Pull-up, Pull-down
 ```
-GPIO_pupdr(GPIOA, 5, 0);  // 0: No Pull-up, Pull-down
-```
+
+---
+
 ## RCC
 
 ### seven_seg_FND_init
@@ -266,8 +282,8 @@ Displays a decimal digit (`num`) on a selected 7-segment display (`select`). Set
 
 **Parameters**
 
-* **num**: The digit to display (0~9)
-* **select**: The digit position to activate (0~3)
+- **num:** The digit to display (0~9)
+- **select:** The digit position to activate (0~3)
 
 **Example code**
 
@@ -275,37 +291,44 @@ Displays a decimal digit (`num`) on a selected 7-segment display (`select`). Set
 seven_seg_FND_display(5, 2); // Display '5' on the third digit
 ```
 
+---
 
 ## Class or Header name
 
 ### Function Name
 
-```
+```c
+// Function prototype here
 ```
 
 **Parameters**
 
-* p1
-* p2
+- p1
+- p2
 
 **Example code**
 
-```
+```c
+// Example usage here
 ```
 
+---
 
 ## Class or Header name
+
 ### Function Name
 
-```
+```c
+// Function prototype here
 ```
 
 **Parameters**
 
-* p1
-* p2
+- p1
+- p2
 
 **Example code**
 
-```
+```c
+// Example usage here
 ```
