@@ -26,8 +26,8 @@ MCU: STM32F411RE, Nucleo-64
   * [GPIO\_otype()](#gpio-otype----)
   * [GPIO\_pupdr()](#gpio-pupdr----)
 * [RCC](#RCC)
-    *[RCC/seven_seg_FND_init()](#RCC-seven_seg_FND_init----)
-    *[RCC/ seven_seg_FND_display()](#RCC-seven_seg_FND_display----)
+  * [RCC/seven_seg_FND_init()](#RCC-seven_seg_FND_init----)
+  * [RCC/ seven_seg_FND_display()](#RCC-seven_seg_FND_display----)
 
 ## GPIO Digital InOut
 
