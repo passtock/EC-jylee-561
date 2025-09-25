@@ -82,6 +82,9 @@ int  GPIO_read(GPIO_TypeDef *Port, int pin);
 void GPIO_ospeed(GPIO_TypeDef* Port, int pin, int speed);
 void GPIO_otype(GPIO_TypeDef* Port, int pin, int type);
 void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pupd);
+void seven_seg_FND_init(void); 
+void seven_seg_FND_display(uint8_t  num, uint8_t select);
+
 
 #ifdef __cplusplus
 }
