@@ -51,6 +51,7 @@ void seven_seg_FND_init(void);
 // Select display: 0 to 3
 // Display a number 0 - 9 only
 void seven_seg_FND_display(uint8_t  num, uint8_t select);
+void sevensegment_display_19(uint8_t num); // 0~19 display
 
  
 #ifdef __cplusplus

@@ -136,20 +136,87 @@ void seven_seg_FND_display(uint8_t  num, uint8_t select){
 		0b11110110  // 9
 	};
 	for(int j =0; j<8; j++){
-		
-		
 		GPIO_write(pinsSEG[j], (segs[num] >> j) & 0x01); // turn on/off segment
-		
-	
 	}
 	GPIO_write(pinsFNDselect[select], HIGH);
-	// for(int i=0; i<8; i++){
-	// 	if(segment[num][i]==1){
-	// 		GPIO_write(pinsSEG[i], HIGH); // turn on segment
-	// 	}else{
-	// 		GPIO_write(pinsSEG[i], LOW); // turn off segment
-	// 	}
-	// }
+}
+volatile uint8_t multiplex_state = 0;
 
-	
+
+
+void sevensegment_display_19(uint8_t num){
+    // 7세그먼트 세그먼트 핀 (a-g, dp)
+    PinName_t pinsSEG[8] = {PB_7, PB_6, PB_5, PB_4, PB_3, PB_2, PB_1, PB_0};
+    // 7세그먼트 선택 핀: pinsFNDselect[0] = LSD (일의 자리, PA_10), pinsFNDselect[1] = MSD (십의 자리, PA_11)
+    PinName_t pinsFNDselect[4] = {PA_10, PA_11, PC_4, PC_3}; 
+    // num이 0~9일 때는 LSD(PA_10)만 사용, num이 10~19일 때는 LSD(PA_10)와 MSD(PA_11) 모두 사용
+    // 가정: MSD = pinsFNDselect[1] (PA_11), LSD = pinsFNDselect[0] (PA_10)
+    // 세그먼트 디코딩 테이블 (PB_7 to PB_0 순서에 맞게)
+    // 0bDPGFEDCBA
+    const uint8_t segs[10]={
+        0b11111100, // 0
+        0b01100000, // 1
+        0b11011010, // 2
+        0b11110010, // 3
+        0b01100110, // 4
+        0b10110110, // 5
+        0b10111110, // 6
+        0b11100000, // 7
+        0b11111110, // 8
+        0b11110110  // 9
+    };
+    
+    // 1. 디스플레이를 모두 끕니다 (잔상 방지)
+    // 두 자릿수만 사용
+    GPIO_write(pinsFNDselect[0], LOW); // LSD 끄기
+    GPIO_write(pinsFNDselect[1], LOW); // MSD 끄기
+
+    // 2. 숫자를 LSD와 MSD로 분리합니다.
+    int digit_lsd = num % 10; // 일의 자리
+    int digit_msd = num / 10; // 십의 자리 (0 또는 1)
+
+    // 3. 멀티플렉싱 상태에 따라 출력합니다.
+    
+    if (multiplex_state == 0) {
+        // --- 일의 자리 (LSD) 출력 ---
+        
+        // 세그먼트 데이터 출력 (LSD)
+        uint8_t segment_data = segs[digit_lsd];
+        for(int j = 0; j < 8; j++){
+            GPIO_write(pinsSEG[j], (segment_data >> j) & 0x01); // 세그먼트 핀 설정
+        }
+
+        // LSD (PA_10) 활성화
+        GPIO_write(pinsFNDselect[0], HIGH);
+        
+        // 다음 상태는 MSD
+        multiplex_state = 1;
+        
+    } else {
+        // --- 십의 자리 (MSD) 출력 ---
+        
+        if (num >= 10) {
+            // 10 이상일 때만 MSD(십의 자리)를 표시합니다 (항상 1)
+            
+            // 세그먼트 데이터 출력 (MSD: 항상 1)
+            uint8_t segment_data = segs[digit_msd]; // digit_msd는 항상 1
+            for(int j = 0; j < 8; j++){
+                GPIO_write(pinsSEG[j], (segment_data >> j) & 0x01); // 세그먼트 핀 설정
+            }
+            
+            // MSD (PA_11) 활성화
+            GPIO_write(pinsFNDselect[1], HIGH);
+            
+        } else {
+            // 0~9일 때는 십의 자리를 비활성화 상태로 유지하거나 0을 표시합니다.
+            // 여기서는 이미 두 디스플레이가 LOW 상태이므로 추가적인 활성화는 하지 않습니다.
+            // 대신, 세그먼트 핀을 모두 꺼서 잔상을 방지할 수 있습니다.
+            for(int j = 0; j < 8; j++){
+                GPIO_write(pinsSEG[j], LOW); // 세그먼트 핀 모두 끄기
+            }
+        }
+        multiplex_state = 0;
+    }
+    
+    
 }

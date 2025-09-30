@@ -21,10 +21,10 @@
 
 // EC course Library
 #include "ecPinNames.h"
-//#include "ecRCC2.h"
-//#include "ecGPIO2.h"
-//#include "ecEXTI2.h"
-//#include "ecSysTick2.h"
+#include "ecRCC2.h"
+#include "ecGPIO2.h"
+#include "ecEXTI2.h"
+#include "ecSysTick2.h"
 //#include "ecTIM2.h"
 //#include "ecPWM2.h"
 //#include "ecStepper2.h"
