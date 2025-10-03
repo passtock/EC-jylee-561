@@ -1,6 +1,6 @@
 # Documentation
 
-[See Class Github](https://github.com/ykkimhgu/EC-student/blob/main/docs/EC_HAL_Documentation.md) for the example documentation
+[See Class Github](https://github.com/ykkimhgu/EC-student/blob/main/docs/EC_HAL_Documentation.md) for the example documentation.
 
 ## Embedded Controller HAL Library
 
@@ -24,8 +24,18 @@
   - [GPIO_otype()](#gpio_otype)
   - [GPIO_pupdr()](#gpio_pupdr)
 - [RCC](#rcc)
-  - [seven_seg_FND_init()](#seven_seg_fnd_init)
-  - [seven_seg_FND_display()](#seven_seg_fnd_display)
+  - [seven_seg_FND_init](#seven_seg_fnd_init)
+  - [seven_seg_FND_display](#seven_seg_fnd_display)
+- [ecSysTick2.h](#ecsystick2h)
+  - [SysTick_init](#systick_init)
+  - [SysTick_Handler](#systick_handler)
+  - [delay_ms](#delay_ms)
+  - [SysTick_reset](#systick_reset)
+  - [SysTick_val](#systick_val)
+  - [SysTick_counter](#systick_counter)
+- [Additional Functions](#additional-functions)
+  - [GPIO_pupd()](#gpio_pupd)
+  - [sevensegment_display_19](#sevensegment_display_19)
 
 ---
 
@@ -85,7 +95,6 @@ void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pupd);
 void seven_seg_FND_init(void); 
 void seven_seg_FND_display(uint8_t  num, uint8_t select);
 
-
 #ifdef __cplusplus
 }
 #endif
@@ -97,7 +106,8 @@ void seven_seg_FND_display(uint8_t  num, uint8_t select);
 
 ### GPIO_init()
 
-Initializes GPIO pins with default setting and enables GPIO Clock. Mode: In/Out/AF/Analog
+Initializes GPIO pins with default setting and enables GPIO Clock.  
+Mode: In/Out/AF/Analog
 
 ```c
 void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
@@ -259,7 +269,8 @@ void seven_seg_FND_init(void);
 
 **Description**
 
-Initializes the DOUT pins for 7-segment LEDs. Sets all segment and digit select pins as outputs and turns off all segments and digits.
+Initializes the DOUT pins for 7-segment LEDs.  
+Sets all segment and digit select pins as outputs and turns off all segments and digits.
 
 **Parameters**
 
@@ -281,7 +292,8 @@ void seven_seg_FND_display(uint8_t num, uint8_t select);
 
 **Description**
 
-Displays a decimal digit (`num`) on a selected 7-segment display (`select`). Sets the appropriate segment pins to show the digit and activates the selected digit.
+Displays a decimal digit (`num`) on a selected 7-segment display (`select`).  
+Sets the appropriate segment pins to show the digit and activates the selected digit.
 
 **Parameters**
 
@@ -296,42 +308,153 @@ seven_seg_FND_display(5, 2); // Display '5' on the third digit
 
 ---
 
-## Class or Header name
+## ecSysTick2.h
 
-### Function Name
+### SysTick_init
 
 ```c
-// Function prototype here
+void SysTick_init(void);
 ```
 
-**Parameters**
+**Description**
 
-- p1
-- p2
+Initializes the SysTick timer to generate an interrupt every 1ms using the processor clock (default: 84MHz PLL).  
+Configures SysTick registers, enables the interrupt, and sets its priority.
 
 **Example code**
 
 ```c
-// Example usage here
+SysTick_init();
 ```
 
 ---
 
-## Class or Header name
-
-### Function Name
+### SysTick_Handler
 
 ```c
-// Function prototype here
+void SysTick_Handler(void);
 ```
+
+**Description**
+
+Interrupt handler for the SysTick timer.  
+Calls `SysTick_counter()` to increment the millisecond tick counter.
+
+---
+
+### delay_ms
+
+```c
+void delay_ms(uint32_t mesc);
+```
+
+**Description**
+
+Delays execution for a specified number of milliseconds using the SysTick timer.
 
 **Parameters**
 
-- p1
-- p2
+- **mesc:** Number of milliseconds to delay
 
 **Example code**
 
 ```c
-// Example usage here
+delay_ms(500); // Delay for 500 ms
+```
+
+---
+
+### SysTick_reset
+
+```c
+void SysTick_reset(void);
+```
+
+**Description**
+
+Resets the SysTick current value register to zero.
+
+**Example code**
+
+```c
+SysTick_reset();
+```
+
+---
+
+### SysTick_val
+
+```c
+uint32_t SysTick_val(void);
+```
+
+**Description**
+
+Returns the current value of the SysTick timer.
+
+**Example code**
+
+```c
+uint32_t val = SysTick_val();
+```
+
+---
+
+### SysTick_counter
+
+```c
+void SysTick_counter(void);
+```
+
+**Description**
+
+Increments the global millisecond tick counter (`msTicks`).  
+Also increments a secondary counter (`count`) every 1000 ms (1 second).
+
+---
+
+## Additional Functions
+
+### GPIO_pupd()
+
+Configures the pull-up/pull-down resistor mode for a GPIO pin.
+
+```c
+void GPIO_pupd(PinName_t pinName, int pupd);
+```
+
+**Parameters**
+
+- **pinName:** Pin identifier (PinName_t)
+- **pupd:** NO_PUPD(0), PULL_UP(1), PULL_DOWN(2), RESERVED(3)
+
+**Example code**
+
+```c
+GPIO_pupd(PA_10, NO_PUPD); // No pull-up, pull-down
+```
+
+---
+
+### sevensegment_display_19
+
+Displays numbers from 0 to 19 on a 2-digit 7-segment display using multiplexing.
+
+```c
+void sevensegment_display_19(uint8_t num);
+```
+
+**Description**
+
+Handles multiplexed display of numbers 0–19 on two 7-segment digits.  
+Alternates between least significant digit (LSD) and most significant digit (MSD) using a global `multiplex_state` variable.
+
+**Parameters**
+
+- **num:** Number to display (0–19)
+
+**Example code**
+
+```c
+sevensegment_display_19(13); // Display '13' on the 7-segment display
 ```
