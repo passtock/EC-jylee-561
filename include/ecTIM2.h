@@ -3,6 +3,11 @@
 * @author  SSSLAB
 * @Mod	   2021-8-12 by YKKIM  	
 * @brief   Embedded Controller:  EC_HAL_for_student_exercise 
+/**
+******************************************************************************
+* @author  SSSLAB
+* @Mod	   2021-8-12 by YKKIM  	
+* @brief   Embedded Controller:  EC_HAL_for_student_exercise 
 * 
 ******************************************************************************
 */
@@ -38,7 +43,7 @@ void TIM_UI_disable(TIM_TypeDef* TIMx);
 
 uint32_t is_UIF(TIM_TypeDef *TIMx);
 void clear_UIF(TIM_TypeDef *TIMx);
-
++
 
 ///////  Example Code 1:  Configure TIM2 with 100usec 
 // void setup(){
@@ -54,9 +59,10 @@ void clear_UIF(TIM_TypeDef *TIMx);
 // }
 
 
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif // __EC_TIM2_H 
 
 #endif // __EC_TIM2_H 

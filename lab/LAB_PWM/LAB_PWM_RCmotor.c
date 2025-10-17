@@ -17,7 +17,7 @@ int main(void) {
         for (float angle = 0; angle <= 10; angle += 0.1) {
             float pulse = angle / 3.0f * 2.0f + 0.5f;
             PWM_pulsewidth_ms(PWM_PIN, pulse); // 0.5ms ~ 2.5ms
-            delay_ms(200);
+            delay_ms(50);
         }
         
     }
