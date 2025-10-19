@@ -1,4 +1,3 @@
-`````markdown
 # LAB: Timer & PWM&#x20;
 
 > Servo motor and DC motor
@@ -10,7 +9,7 @@
 **Github:** https://github.com/passtock/EC-jylee-561/tree/main 
 
 **Demo Video:** [Youtube link](https://youtube.com/shorts/yCaQONYbu2s?feature=share)
-			[Youtube link](https://youtube.com/shorts/s5i21MtjLMY?feature=share)
+				[Youtube link](https://youtube.com/shorts/s5i21MtjLMY?feature=share)
 
 ## Introduction
 
@@ -158,7 +157,7 @@ void PWM_pinmap(PinName_t pinName, TIM_TypeDef **TIMx, int *chN);
 
 /* PWM PERIOD SETUP */
 // allowable range for msec:  1~2,000
-void PWM_period(PinName_t pinName,  uint32_t msec);
+void PWM_period(PinName_t pinName,  uint32_t msec);	
 void PWM_period_ms(PinName_t pinName,  uint32_t msec);	// same as PWM_period()
 // allowable range for usec:  1~1,000
 void PWM_period_us(PinName_t pinName, uint32_t usec);
@@ -280,16 +279,16 @@ int main(void) {
     
 		while (1) {
         
-			for (float angle = 0.5; angle <= 2.5; angle += ((2.5f- 0.5f) / 18.0f)) {
+				for (float angle = 0.5; angle <= 2.5; angle += ((2.5f- 0.5f) / 18.0f)) {
             
-				PWM_pulsewidth_ms(PWM_PIN, angle); // 0.5ms ~ 2.5ms
-				delay_ms(500);
-			}
-			for(float angle = 2.5; angle >= 0.5; angle -= ((2.5f- 0.5f) / 18.0f)) {
+						PWM_pulsewidth_ms(PWM_PIN, angle); // 0.5ms ~ 2.5ms
+						delay_ms(500);
+				}
+				for(float angle = 2.5; angle >= 0.5; angle -= ((2.5f- 0.5f) / 18.0f)) {
             
-				PWM_pulsewidth_ms(PWM_PIN, angle); // 2.5ms ~ 0.5ms
-				delay_ms(500);
- 	 }
+						PWM_pulsewidth_ms(PWM_PIN, angle); // 2.5ms ~ 0.5ms
+						delay_ms(500);
+		 }
 		}
 }
 void setup(void) {
@@ -333,20 +332,20 @@ int main(void) {
 
 // Initialization
 void setup(void){
-	RCC_PLL_init();					// System Clock = 84MHz
+	RCC_PLL_init();				// System Clock = 84MHz
 	GPIO_init(GPIOA, LED_PIN, OUTPUT);	// calls RCC_GPIOA_enable()
 	TIM_UI_init(TIM2, 1);			// TIM2 Update-Event Interrupt every 1 msec 
 	TIM_UI_enable(TIM2);
 }
 
 void TIM2_IRQHandler(void){
-	if(is_UIF(TIM2)){				// Check UIF(update interrupt flag)
+	if(is_UIF(TIM2)){			// Check UIF(update interrupt flag)
 		_count++;
 		if (_count > 1000) {
-			LED_toggle();			// LED toggle every 1 sec
+			LED_toggle();		// LED toggle every 1 sec
 			_count = 0;
 		}
-		clear_UIF(TIM2);			// Clear UI flag by writing 0
+		clear_UIF(TIM2); 		// Clear UI flag by writing 0
 	}
 }
 ```
@@ -374,12 +373,12 @@ void setup(void);
 
 int main(void) {
 	// Initialization --------------------------------------------------
-	setup();
+	setup();	
 	
 	// Infinite Loop ---------------------------------------------------
 	while(1){
 		LED_toggle();		
-		for (int i=0; i<5; i++) {					
+		for (int i=0; i<5; i++) {						
 			PWM_duty(PWM_PIN, (float)0.2*i);			
 			delay_ms(1000);
 		}		
@@ -494,21 +493,21 @@ static uint32_t last_speed_change_time = 0; // Timestamp for the last speed chan
 int main(void) {
 	// Initialization
 	setup();
-	
+    
 	int button_prev_state = 1;
 
 	while(1) {
 			// --- 1. Handle button (non-blocking) ---
 		int button_curr_state = GPIO_read(BUTTON_PIN);
-		
+        
 	// Detect button press (falling edge)
 		if (button_curr_state == 0 && button_prev_state == 1) {
 			motor_mode = 1 - motor_mode; // toggle mode (RUN <-> STOP)
-			
+            
 			// reset run state and timer when mode changes
 			run_state = 0; 
 			last_speed_change_time = millis();
-			
+            
 			delay_ms(50); // debouncing
 		}
 		button_prev_state = button_curr_state;
@@ -540,13 +539,13 @@ int main(void) {
 void setup(void) {
 	RCC_PLL_init();
 	SysTick_init(); // millis() 
-	
+    
 	// GPIO and PWM initialization
 	GPIO_init(BUTTON_PIN, INPUT);
 	GPIO_pupd(BUTTON_PIN, 1);
 	GPIO_init(in1, OUTPUT);
 	GPIO_write(in1, 0);
-	
+    
 	PWM_init(PWM_PIN);
 	PWM_period(PWM_PIN, 1);
 }
@@ -571,7 +570,6 @@ https://blog.embeddedexpert.io/?p=2363
 Complete list of all references used (github, blog, paper, etc)
 
 ```
-
 ```
 
 ## Troubleshooting
@@ -622,17 +620,3 @@ int main()
 ````
 
 <https://dojang.io/mod/page/view.php?id=352> \*\*
-
-`````
-
-
-
-
-
-
-
-
-
-
-
-`````
