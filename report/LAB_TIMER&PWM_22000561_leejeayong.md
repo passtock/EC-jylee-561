@@ -405,6 +405,83 @@ Experiment images and results
 > Show experiment images /results
 
 Add [demo video link](https://github.com/ykkimhgu/course-doc/blob/master/ec-course/lab/link/README.md)
+<img width="924" height="476" alt="Image" src="https://github.com/user-attachments/assets/de01f8b9-7695-40bf-ad22-0c14ca3977a9" />
+
+<img width="455" height="518" alt="Image" src="https://github.com/user-attachments/assets/bd59425a-c9e5-4a46-8243-16d3fb56945e" />
+
+<img width="441" height="499" alt="Image" src="https://github.com/user-attachments/assets/c28c3d7b-751a-4214-96a8-2b0e0cdfb054" />
+
+<img width="445" height="397" alt="Image" src="https://github.com/user-attachments/assets/7d772d6b-8a1f-4c34-98d9-ff07257d5bc3" />
+
+<img width="453" height="413" alt="Image" src="https://github.com/user-attachments/assets/c131152a-0800-4669-a368-ae07decb9ff6" />
+
+<img width="430" height="415" alt="Image" src="https://github.com/user-attachments/assets/b8ec00b9-b0ed-4d6b-9e61-bbf4cff155b8" />
+
+<img width="428" height="400" alt="Image" src="https://github.com/user-attachments/assets/d68779b9-acec-4d7d-943a-a04d45e151f8" />
+
+<img width="435" height="389" alt="Image" src="https://github.com/user-attachments/assets/9920aadd-4b88-4131-95a1-f7f0413f0f24" />
+
+<img width="432" height="391" alt="Image" src="https://github.com/user-attachments/assets/e91c9b1d-3c96-4dc6-8f9a-603c152a468e" />
+
+<img width="413" height="364" alt="Image" src="https://github.com/user-attachments/assets/7ae0999d-8814-4443-bea4-7b3bfa4c3e44" />
+
+<img width="406" height="339" alt="Image" src="https://github.com/user-attachments/assets/5e6b87b5-8671-4127-abf9-2f5c1a536364" />
+
+<img width="402" height="343" alt="Image" src="https://github.com/user-attachments/assets/3243a430-4562-4a5a-bf1c-cd3543db3a27" />
+
+<img width="406" height="368" alt="Image" src="https://github.com/user-attachments/assets/da68286b-6ea1-47f1-8271-69c4ce08e3a8" />
+
+<img width="388" height="391" alt="Image" src="https://github.com/user-attachments/assets/2bd1f545-7a5d-4013-ac23-86cee09785ba" />
+
+<img width="377" height="338" alt="Image" src="https://github.com/user-attachments/assets/10ad2c9f-fab9-403e-8153-fe2ea057e5a4" />
+
+<img width="393" height="363" alt="Image" src="https://github.com/user-attachments/assets/1bbff1c6-e75b-45af-bad9-53e64cf049f3" />
+
+<img width="377" height="374" alt="Image" src="https://github.com/user-attachments/assets/223756bd-d409-4477-a418-431be4512b28" />
+
+<img width="361" height="370" alt="Image" src="https://github.com/user-attachments/assets/4a7918d8-e78e-4eea-814a-5b1860d49cc5" />
+
+<img width="311" height="400" alt="Image" src="https://github.com/user-attachments/assets/f38f6905-4c13-4f71-8bb4-95d2dc1021bd" />
+
+<img width="395" height="340" alt="Image" src="https://github.com/user-attachments/assets/a59cf160-0738-49a8-bbca-0b0858f5d4e5" />
+
+<img width="361" height="367" alt="Image" src="https://github.com/user-attachments/assets/a7c9a5b7-6b62-4262-8933-231652bf6928" />
+
+<img width="342" height="388" alt="Image" src="https://github.com/user-attachments/assets/0dde3b56-9ffb-4d21-8677-49608883d678" />
+
+<img width="372" height="381" alt="Image" src="https://github.com/user-attachments/assets/83ec36d0-5d75-4517-9d54-8c2f41e206b2" />
+
+<img width="315" height="343" alt="Image" src="https://github.com/user-attachments/assets/aab34dd5-e944-43ae-af61-572ad8292017" />
+
+<img width="283" height="332" alt="Image" src="https://github.com/user-attachments/assets/efd54ab6-5b4a-49b5-b143-d035a1a30e1b" />
+
+<img width="350" height="359" alt="Image" src="https://github.com/user-attachments/assets/a0e5b576-c0dc-4524-b125-2191b5ed7399" />
+
+<img width="350" height="366" alt="Image" src="https://github.com/user-attachments/assets/b9b77f6e-5faf-4b2d-931a-8f1dc9e08008" />
+
+<img width="309" height="325" alt="Image" src="https://github.com/user-attachments/assets/b875b27a-dc48-43d3-8954-4bfe3ad332a9" />
+
+<img width="283" height="322" alt="Image" src="https://github.com/user-attachments/assets/c6c6e673-6c61-4ab7-bdfb-f3d6288dde4b" />
+
+<img width="287" height="327" alt="Image" src="https://github.com/user-attachments/assets/7545c0cf-7616-4495-bc61-c08ccde785ad" />
+
+<img width="285" height="321" alt="Image" src="https://github.com/user-attachments/assets/0a580d0c-f3c5-4e17-8d45-87a9283e156e" />
+
+<img width="284" height="301" alt="Image" src="https://github.com/user-attachments/assets/75c8a69b-225e-4d9c-a8c1-9fca53918520" />
+
+<img width="306" height="366" alt="Image" src="https://github.com/user-attachments/assets/6b7eff8f-b1f6-4d53-b893-f8a9067b3bfd" />
+
+<img width="257" height="350" alt="Image" src="https://github.com/user-attachments/assets/4a29bcec-ee38-4f10-b134-aa1e149e72e1" />
+
+<img width="270" height="341" alt="Image" src="https://github.com/user-attachments/assets/e7c099db-ea8e-45eb-ade0-eaae0c5eb540" />
+
+<img width="248" height="349" alt="Image" src="https://github.com/user-attachments/assets/fb8183e7-26ab-4431-afb3-c1a3f0b155c0" />
+
+<img width="227" height="356" alt="Image" src="https://github.com/user-attachments/assets/73da9ad1-9312-4696-a1e1-457a00c840a8" />
+
+<img width="234" height="340" alt="Image" src="https://github.com/user-attachments/assets/54c7d2ef-aca2-4ef2-b9b3-cf14cfd23a2d" />
+
+<img width="216" height="371" alt="Image" src="https://github.com/user-attachments/assets/408bea9d-81ce-4540-a4bd-db9c904a4219" />
 
 ***
 
@@ -563,6 +640,13 @@ Experiment images and results
 > Show experiment images /results
 
 Add [demo video link](https://github.com/ykkimhgu/course-doc/blob/master/ec-course/lab/link/README.md)
+<img width="1186" height="750" alt="Image" src="https://github.com/user-attachments/assets/94cc7d15-d193-4087-80dc-01c2ae093e6f" />
+
+<img width="441" height="398" alt="Image" src="https://github.com/user-attachments/assets/32c27a25-2191-40c9-9c9c-13fd08fcaab7" />
+
+<img width="422" height="344" alt="Image" src="https://github.com/user-attachments/assets/c32cc10d-621f-42f3-95a0-fbf24b473532" />
+
+<img width="405" height="357" alt="Image" src="https://github.com/user-attachments/assets/d82273b0-87b7-440d-aaaf-22406bfe7cee" />
 
 ### Reference
 
