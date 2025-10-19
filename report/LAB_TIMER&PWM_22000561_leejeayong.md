@@ -221,8 +221,7 @@ You need to observe how the PWM signal output is generated as the input button i
 #### Circuit Diagram
 
 > You need to include the circuit diagram
-
-![image](https://user-images.githubusercontent.com/38373000/192134563-72f68b29-4127-42ac-b064-2eda95a9a52a.png)
+<img width="924" height="476" alt="Image" src="https://github.com/user-attachments/assets/de01f8b9-7695-40bf-ad22-0c14ca3977a9" />
 
 #### Discussion
 
@@ -403,9 +402,8 @@ void setup(void) {
 Experiment images and results
 
 > Show experiment images /results
+[Youtube link](https://youtube.com/shorts/yCaQONYbu2s?feature=share)
 
-Add [demo video link](https://github.com/ykkimhgu/course-doc/blob/master/ec-course/lab/link/README.md)
-<img width="924" height="476" alt="Image" src="https://github.com/user-attachments/assets/de01f8b9-7695-40bf-ad22-0c14ca3977a9" />
 
 <img width="455" height="518" alt="Image" src="https://github.com/user-attachments/assets/bd59425a-c9e5-4a46-8243-16d3fb56945e" />
 
@@ -532,7 +530,7 @@ By pressing the push button (PA4), toggle from Running and stopping the DC motor
 
 > You need to include the circuit diagram
 
-![image](https://user-images.githubusercontent.com/38373000/192134563-72f68b29-4127-42ac-b064-2eda95a9a52a.png)
+<img width="1186" height="750" alt="Image" src="https://github.com/user-attachments/assets/94cc7d15-d193-4087-80dc-01c2ae093e6f" />
 
 #### Code
 
@@ -640,7 +638,7 @@ Experiment images and results
 > Show experiment images /results
 
 Add [demo video link](https://github.com/ykkimhgu/course-doc/blob/master/ec-course/lab/link/README.md)
-<img width="1186" height="750" alt="Image" src="https://github.com/user-attachments/assets/94cc7d15-d193-4087-80dc-01c2ae093e6f" />
+
 
 <img width="441" height="398" alt="Image" src="https://github.com/user-attachments/assets/32c27a25-2191-40c9-9c9c-13fd08fcaab7" />
 
