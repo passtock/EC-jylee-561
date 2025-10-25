@@ -58,6 +58,46 @@ void delay_ms (uint32_t mesc){ // 매개변수 이름을 mesc로 변경 (msTicks
 
     while ((msTicks - curTicks) < mesc);
 }
+void delay_us(uint32_t usec) {
+	uint32_t start_tick = msTicks;
+	uint32_t start_val = SysTick->VAL;
+	
+	// For delays >= 1ms, use simple ms counting
+	if (usec >= 1000) {
+		uint32_t ms = usec / 1000;
+		uint32_t remaining_us = usec % 1000;
+		delay_ms(ms);
+		usec = remaining_us;
+		if (usec == 0) return;
+		start_val = SysTick->VAL;
+	}
+	
+	// For sub-millisecond delays
+	uint32_t ticks_needed = (MCU_CLK_PLL / 1000000) * usec;  // 84 ticks per microsecond
+	
+	while (1) {
+		uint32_t current_tick = msTicks;
+		uint32_t current_val = SysTick->VAL;
+		
+		// Calculate elapsed ticks
+		uint32_t elapsed;
+		if (current_tick > start_tick) {
+			// msTicks incremented (SysTick reloaded)
+			elapsed = (start_val - 0) + (SysTick->LOAD - current_val);
+			elapsed += (current_tick - start_tick - 1) * SysTick->LOAD;
+		} else {
+			// Same ms period
+			if (current_val < start_val) {
+				elapsed = start_val - current_val;
+			} else {
+				// Wrapped around
+				elapsed = start_val + (SysTick->LOAD + 1 - current_val);
+			}
+		}
+		
+		if (elapsed >= ticks_needed) break;
+	}
+}
 
 
 void SysTick_reset(void)
@@ -75,4 +115,8 @@ void SysTick_counter() {
 	if (msTicks % 1000 == 0) {
 		count++;
 	}
+}
+
+uint32_t millis(void) {
+	return msTicks;
 }
