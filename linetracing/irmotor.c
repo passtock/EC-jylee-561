@@ -1,131 +1,228 @@
+/*
+ * Line Tracing program (extended)
+ * - Manual mode: UART keyboard control (i/k/j/l) and PA5 LED indicates MANUAL
+ * - 'a' switches to AUTO mode: ADC IR-based line tracing
+ * - Line-tracing only (ADC IR automatic)
+ */
+
 #include "ecSTM32F4v2.h"
 #include "ecADC2.h"
 #include "ecPWM2.h"
+#include "ecICAP2.h"
 
-//IR parameter//
-uint32_t value1, value2;
-volatile uint8_t adc_ready = 0; // set when a full sequence (both channels) completed
-int flag = 0;
-PinName_t seqCHn[2] = {PB_0, PB_1};
+// IR sensor pins
+#define IR_RIGHT_PIN PB_0
+#define IR_LEFT_PIN  PB_1
+
+// Motor pins
+#define LEFT_MOTOR_PIN  PA_0
+#define RIGHT_MOTOR_PIN PA_1
+
+
+
+// Bell servo pin
+
+// Ultrasonic removed for line-tracing-only build
+
+// Ultrasonic pins
+#define TRIG_PIN   PA_6
+#define ECHO_PIN   PB_6
+
+// stop indicator LED
+#define STOP_LED PA_5
 
 // Sensor thresholds
 #define WHITE_THRESHOLD 400U
 #define BLACK_THRESHOLD 3500U
-// Motor PWM pins
-#define MOTOR_LEFT_PIN  PA_0
-#define MOTOR_RIGHT_PIN PA_1
 
-// Set motor speeds: left and right in range 0.0 .. 1.0
+volatile uint32_t ir_right_value = 0;
+volatile uint32_t ir_left_value = 0;
+PinName_t seqCHn[2] = {IR_RIGHT_PIN, IR_LEFT_PIN};
+
+extern volatile uint32_t msTicks;
+
+// Ultrasonic capture globals
+volatile uint32_t us_ovf_cnt = 0;
+volatile uint32_t us_time1 = 0;
+volatile uint32_t us_time2 = 0;
+volatile uint32_t us_timeInterval = 0; // ticks (10us)
+volatile uint8_t us_new_data = 0;
+
+// Ultrasonic removed
+
+// bell/servo removed: line-tracing only
+
 static inline void set_speed(float left, float right)
 {
-	if(left < 0.f) left = 0.f; if(left > 1.f) left = 1.f;
-	if(right < 0.f) right = 0.f; if(right > 1.f) right = 1.f;
-	PWM_duty(MOTOR_LEFT_PIN, left);
-	PWM_duty(MOTOR_RIGHT_PIN, right);
+    if(left < 0.f) left = 0.f;
+    if(left > 1.f) left = 1.f;
+    if(right < 0.f) right = 0.f;
+    if(right > 1.f) right = 1.f;
+    PWM_duty(LEFT_MOTOR_PIN, left);
+    PWM_duty(RIGHT_MOTOR_PIN, right);
 }
 
-void setup(void);
+// bell_press removed (servo not used for line tracing)
 
-int main(void) { 
-	// Initialiization --------------------------------------------------------
-	setup();
-	
-	// Inifinite Loop ----------------------------------------------------------
-	while(1){
-		if(adc_ready){
-			uint32_t v1 = value1;
-			uint32_t v2 = value2;
-			adc_ready = 0;
-
-			printf("IR1 = %lu\r\n", (unsigned long)v1);
-			printf("IR2 = %lu\r\n", (unsigned long)v2);
-
-			const char *s1 = (v1 >= BLACK_THRESHOLD) ? "BLACK" : ((v1 <= WHITE_THRESHOLD) ? "WHITE" : "GRAY");
-			const char *s2 = (v2 >= BLACK_THRESHOLD) ? "BLACK" : ((v2 <= WHITE_THRESHOLD) ? "WHITE" : "GRAY");
-			printf("IR1=%s  IR2=%s\r\n", s1, s2);
-
-			// Mapping: both WHITE -> STRAIGHT
-			// IR1 BLACK -> GO RIGHT; IR2 BLACK -> GO LEFT; BOTH BLACK unexpected
-			int ir1_white = (v1 <= WHITE_THRESHOLD);
-			int ir2_white = (v2 <= WHITE_THRESHOLD);
-			int ir1_black = (v1 >= BLACK_THRESHOLD);
-			int ir2_black = (v2 >= BLACK_THRESHOLD);
-
-			if(ir1_white && ir2_white){
-				printf("GO STRAIGHT\r\n");
-				// both white -> go straight
-				set_speed(0.65f, 0.65f);
-			} else if(ir1_black && !ir2_black){
-				printf("GO RIGHT\r\n");
-				// IR1 (right sensor) black -> turn right (slow right motor)
-				set_speed(0.65f, 0.30f);
-			} else if(ir2_black && !ir1_black){
-				printf("GO LEFT\r\n");
-				// IR2 (left sensor) black -> turn left (slow left motor)
-				set_speed(0.30f, 0.65f);
-			} else if(ir1_black && ir2_black){
-				printf("ERR: BOTH BLACK (unexpected)\r\n");
-				// stop on unexpected both-black
-				set_speed(0.f, 0.f);
-			} else {
-				printf("SEARCH\r\n");
-				set_speed(0.45f, 0.45f);
-			}
-
-			printf("\r\n");
-		}
-
-		delay_ms(50);
-	}
-}
-
-// Initialiization 
 void setup(void)
-{	
-	RCC_PLL_init();                         // System Clock = 84MHz
-	UART2_init();				// UART2 Init
-	SysTick_init();				// SysTick Init
-	
-	// ADC Init  Default: HW triggered by TIM3 counter @ 1msec
-	ADC_init(PB_0);
-	ADC_init(PB_1);
+{
+    RCC_PLL_init();
+    SysTick_init();
+    UART2_init();
 
-	// ADC channel sequence setting
-	ADC_sequence(seqCHn, 2);
-	
-	/* Set ADC clock prescaler to /8 (ADCPRE = 11b at bits [17:16]) */
-	ADC->CCR = (ADC->CCR & ~(3UL << 16)) | (3UL << 16);
-	
-	// Ensure pins are in analog/no pull state
-	GPIO_init(PB_0, 3);
-	GPIO_pupd(PB_0, 0);
-	GPIO_init(PB_1, 3);
-	GPIO_pupd(PB_1, 0);
+    // ADC init and sequence
+    ADC_init(IR_RIGHT_PIN);
+    ADC_init(IR_LEFT_PIN);
+    ADC_sequence(seqCHn, 2);
+    ADC->CCR = (ADC->CCR & ~(3UL << 16)) | (3UL << 16); // ADCPRE = /8
 
-	// Motor PWM initialization (1kHz)
-	PWM_init(MOTOR_LEFT_PIN);
-	PWM_init(MOTOR_RIGHT_PIN);
-	PWM_period_us(MOTOR_LEFT_PIN, 1000);
-	PWM_period_us(MOTOR_RIGHT_PIN, 1000);
-	// stop motors initially
-	PWM_duty(MOTOR_LEFT_PIN, 0.f);
-	PWM_duty(MOTOR_RIGHT_PIN, 0.f);
+    // Motors (1kHz)
+    PWM_init(LEFT_MOTOR_PIN);
+    PWM_init(RIGHT_MOTOR_PIN);
+    PWM_period_us(LEFT_MOTOR_PIN, 100);
+    PWM_period_us(RIGHT_MOTOR_PIN, 100);
+    set_speed(0.f, 0.f);
+    // stop indicator LED
+    GPIO_init(STOP_LED, OUTPUT);
+    GPIO_write(STOP_LED, 0);
+
+    // Ultrasonic TRIG (GPIO) + ECHO (ICAP)
+    GPIO_init(TRIG_PIN, OUTPUT);
+    GPIO_write(TRIG_PIN, 0);
+
+    GPIO_init(ECHO_PIN, EC_AF);
+    GPIO_pupd(ECHO_PIN, EC_PD);
+
+    ICAP_init(ECHO_PIN);
+    ICAP_counter_us(ECHO_PIN, 10);    // 10 us tick
+    ICAP_setup(ECHO_PIN, 1, IC_RISE);
+    ICAP_setup(ECHO_PIN, 2, IC_FALL);
+
+    // clear and enable TIM4 IRQ for input capture
+    clear_UIF(TIM4);
+    clear_CCIF(TIM4, 1);
+    clear_CCIF(TIM4, 2);
+    NVIC_EnableIRQ(TIM4_IRQn);
+    NVIC_SetPriority(TIM4_IRQn, 2);
 }
 
-
-void ADC_IRQHandler(void){
-	if(is_ADC_OVR())
-		clear_ADC_OVR();
-	
-	if(is_ADC_EOC()){		// after finishing sequence
-		if (flag==0) {
-			value1 = ADC_read();
-		} else if (flag==1) {
-			value2 = ADC_read();
-			// second channel done -> mark ready for main loop
-			adc_ready = 1;
-		}
-
-		flag = !flag;		// flag toggle
-	}
+// ADC IRQ handler
+void ADC_IRQHandler(void)
+{
+    static int idx = 0;
+    if(is_ADC_EOC()){
+        uint32_t v = ADC_read();
+        if(idx == 0) ir_right_value = v; else ir_left_value = v;
+        idx = (idx + 1) & 1;
+    }
 }
+
+// TIM4 IRQ for ultrasonic input-capture
+void TIM4_IRQHandler(void)
+{
+    // overflow
+    if(is_UIF(TIM4)){
+        clear_UIF(TIM4);
+        if(1) us_ovf_cnt++;
+    }
+
+    // rising edge (IC1)
+    if(is_CCIF(TIM4, 1)){
+        clear_CCIF(TIM4, 1);
+        us_time1 = ICAP_capture(TIM4, 1);
+        us_ovf_cnt = 0;
+    }
+
+    // falling edge (IC2)
+    if(is_CCIF(TIM4, 2)){
+        clear_CCIF(TIM4, 2);
+        us_time2 = ICAP_capture(TIM4, 2);
+        us_timeInterval = (us_ovf_cnt * 65536UL) + us_time2 - us_time1;
+        us_new_data = 1;
+    }
+}
+
+int main(void)
+{
+    setup();
+
+    const float SPEED_FORWARD = 1.0f;
+    const float SPEED_TURN    = 0.00f;
+
+    // modes removed; continuous automatic line tracing with ultrasonic stop
+
+    uint32_t last_trig_ms = 0;
+    const uint32_t TRIG_PERIOD_MS = 60; // trigger every 60 ms
+    uint8_t stopped = 0;
+
+    while(1){
+            // print current IR sensor RAW values
+            printf("IR_RAW: R=%lu  L=%lu\r\n", (unsigned long)ir_right_value, (unsigned long)ir_left_value);
+
+            // Trigger ultrasonic periodically
+            if ((msTicks - last_trig_ms) >= TRIG_PERIOD_MS) {
+                last_trig_ms = msTicks;
+                // send single 10us pulse
+                GPIO_write(TRIG_PIN, 1);
+                for (volatile int i = 0; i < 84; i++); // approx 10us (calibrate if needed)
+                GPIO_write(TRIG_PIN, 0);
+            }
+
+            // if stopped by obstacle, skip line-tracing control
+            if (stopped == 0) {
+                // Continuous line-tracing logic (no modes)
+                int ir1_white = (ir_right_value <= WHITE_THRESHOLD);
+                int ir2_white = (ir_left_value <= WHITE_THRESHOLD);
+                int ir1_black = (ir_right_value >= BLACK_THRESHOLD);
+                int ir2_black = (ir_left_value >= BLACK_THRESHOLD);
+
+                if(ir1_white && ir2_white){
+                    // both white -> straight
+                    set_speed(SPEED_TURN, SPEED_TURN);
+                } else if(ir1_black && !ir2_black){
+                    // right sensor sees black -> go right (right motor stronger)
+                    set_speed(SPEED_TURN, SPEED_FORWARD);
+                } else if(ir2_black && !ir1_black){
+                    // left sensor sees black -> go left (left motor stronger)
+                    set_speed(SPEED_FORWARD, SPEED_TURN);
+                } else if(ir1_black && ir2_black){
+                    // both black -> treat as on line -> forward
+                    set_speed(SPEED_TURN, SPEED_TURN);
+                } else{
+                    // gray area -> go straight
+                    set_speed(SPEED_TURN, SPEED_TURN);
+                }
+            }
+
+            // handle ultrasonic measurement result
+            if (us_new_data) {
+                us_new_data = 0;
+                uint32_t time_us = us_timeInterval * 10UL; // 10us tick
+                uint32_t distance_cm = (uint32_t)(((uint64_t)time_us * 343ULL) / 20000ULL);
+
+                if (distance_cm <= 7) {
+                    // stop motors
+                    set_speed(1.f, 1.f);
+                    GPIO_write(STOP_LED, 1);
+                    stopped = 1;
+                    printf("ULTRA STOP: %lu cm\r\n", (unsigned long)distance_cm);
+                } else {
+                    if (stopped) {
+                        // resume
+                        GPIO_write(STOP_LED, 0);
+                        stopped = 0;
+                        printf("ULTRA RESUME: %lu cm\r\n", (unsigned long)distance_cm);
+                    } else {
+                        // print distance only
+                        printf("ULTRA: %lu cm\r\n", (unsigned long)distance_cm);
+                    }
+                }
+            }
+
+            delay_ms(10);
+    }
+
+    return 0;
+}
+
+// TIM4 IRQ removed (no ultrasonic input-capture in this build)
